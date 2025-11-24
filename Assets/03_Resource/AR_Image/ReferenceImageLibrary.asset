@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: ReferenceImageLibrary
+  m_EditorClassIdentifier: 
+  m_GuidLow: 4641034497486894955
+  m_GuidHigh: 3315633671216389544
+  m_DataStore:
+    m_Storage: []
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 5321648159709492499
+      m_GuidHigh: 14218103046137760678
+    m_SerializedTextureGuid:
+      m_GuidLow: 3352007578226724309
+      m_GuidHigh: 2937929511745108090
+    m_Size: {x: 1, y: 1}
+    m_SpecifySize: 1
+    m_Name: SOGANG
+    m_Texture: {fileID: 0}
+  - m_SerializedGuid:
+      m_GuidLow: 5760413738267061667
+      m_GuidHigh: 4053718430236942738
+    m_SerializedTextureGuid:
+      m_GuidLow: 3450919760127921398
+      m_GuidHigh: 8802517781327898472
+    m_Size: {x: 1, y: 1}
+    m_SpecifySize: 1
+    m_Name: QRCODE
+    m_Texture: {fileID: 0}
