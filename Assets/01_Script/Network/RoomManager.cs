@@ -15,7 +15,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
     [SerializeField] private string gameSceneName = "SharedRoomScene";
     [SerializeField] private int maxPlayersPerRoom = 4;
 
-    // 방 목록
+    // 방 목록 (Dictionary로 누적 관리)
+    private Dictionary<string, RoomInfo> roomDict = new Dictionary<string, RoomInfo>();
     public List<RoomInfo> RoomList { get; private set; } = new List<RoomInfo>();
 
     // 이벤트
@@ -95,19 +96,28 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        Debug.Log($"[RoomManager] 방 목록 업데이트: {roomList.Count}개");
+        Debug.Log($"[RoomManager] 방 목록 업데이트: {roomList.Count}개 변경");
 
-        // 방 목록 갱신
-        RoomList.Clear();
+        // 변경된 방만 업데이트 (누적 관리)
         foreach (var room in roomList)
         {
-            // 삭제된 방은 제외
-            if (!room.RemovedFromList && room.IsOpen && room.IsVisible)
+            if (room.RemovedFromList || !room.IsOpen || !room.IsVisible || room.PlayerCount == 0)
             {
-                RoomList.Add(room);
+                // 삭제된 방이거나 비공개/닫힌 방이면 제거
+                roomDict.Remove(room.Name);
+            }
+            else
+            {
+                // 새 방이거나 업데이트된 방이면 추가/갱신
+                roomDict[room.Name] = room;
             }
         }
 
+        // Dictionary를 List로 변환
+        RoomList.Clear();
+        RoomList.AddRange(roomDict.Values);
+
+        Debug.Log($"[RoomManager] 현재 총 방 개수: {RoomList.Count}개");
         OnRoomListUpdated?.Invoke(RoomList);
     }
 

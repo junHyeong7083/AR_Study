@@ -52,6 +52,7 @@ public class LobbyUI : MonoBehaviour
 
         if (arToggle != null)
             arToggle.isOn = true;
+
     }
 
     private void OnDestroy()
