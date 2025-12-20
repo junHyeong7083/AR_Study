@@ -27,13 +27,3 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: SOGANG
     m_Texture: {fileID: 0}
-  - m_SerializedGuid:
-      m_GuidLow: 5760413738267061667
-      m_GuidHigh: 4053718430236942738
-    m_SerializedTextureGuid:
-      m_GuidLow: 3450919760127921398
-      m_GuidHigh: 8802517781327898472
-    m_Size: {x: 1, y: 1}
-    m_SpecifySize: 1
-    m_Name: QRCODE
-    m_Texture: {fileID: 0}

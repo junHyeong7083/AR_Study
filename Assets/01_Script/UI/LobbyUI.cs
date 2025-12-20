@@ -156,6 +156,7 @@ public class LobbyUI : MonoBehaviour
         {
             if (vrToggle != null) vrToggle.isOn = false;
             RoomManager.Instance?.SetPlatform(RoomManager.PlatformType.AR);
+            UpdateCreateButtonState(true);
         }
     }
 
@@ -165,6 +166,20 @@ public class LobbyUI : MonoBehaviour
         {
             if (arToggle != null) arToggle.isOn = false;
             RoomManager.Instance?.SetPlatform(RoomManager.PlatformType.VR);
+            UpdateCreateButtonState(true);  // VR도 방 생성 가능
+        }
+    }
+
+    private void UpdateCreateButtonState(bool canCreate)
+    {
+        if (createRoomButton != null)
+        {
+            createRoomButton.interactable = canCreate;
+        }
+
+        if (roomNameInput != null)
+        {
+            roomNameInput.interactable = canCreate;
         }
     }
 }

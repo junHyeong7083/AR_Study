@@ -97,3 +97,7 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Photon Settings (App ID 보호)
+/[Aa]ssets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
+/[Aa]ssets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset.meta
