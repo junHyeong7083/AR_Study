@@ -101,3 +101,6 @@ InitTestScene*.unity*
 # Photon Settings (App ID 보호)
 /[Aa]ssets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset
 /[Aa]ssets/Photon/PhotonUnityNetworking/Resources/PhotonServerSettings.asset.meta
+
+# Claude
+.claude/

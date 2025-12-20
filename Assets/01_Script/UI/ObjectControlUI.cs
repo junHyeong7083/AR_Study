@@ -101,10 +101,7 @@ public class ObjectControlUI : MonoBehaviour
     {
         if (controlPanel == null) return;
 
-        // VR 모드에서만 표시
-        if (XRPlatformManager.Instance != null)
-        {
-            controlPanel.SetActive(XRPlatformManager.Instance.IsVR);
-        }
+        // AR, VR 모두 표시
+        controlPanel.SetActive(true);
     }
 }

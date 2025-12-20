@@ -47,7 +47,9 @@ public class ARMultiTrackedImageController : MonoBehaviourPunCallbacks
 
     private void HandleAddedImage(ARTrackedImage trackedImage)
     {
-        string imageName = trackedImage.referenceImage.name;
+        // 고유 식별자로 trackableId 사용
+        string imageName = trackedImage.trackableId.ToString();
+        Debug.Log($"[ARController] 이미지 감지: {imageName}");
 
         // 마커 정보 저장
         trackedImages[imageName] = trackedImage;
@@ -58,8 +60,9 @@ public class ARMultiTrackedImageController : MonoBehaviourPunCallbacks
             XRPlatformManager.Instance.SetARMarkerAnchor(trackedImage.transform);
         }
 
-        int prefabIdx = GetPrefabIndexByImageName(imageName);
-        if (prefabIdx < 0 || prefabIdx >= prefabNames.Length || string.IsNullOrEmpty(prefabNames[prefabIdx])) return;
+        // 첫 번째 프리팹 사용 (이미지가 하나이므로)
+        int prefabIdx = 0;
+        if (prefabIdx >= prefabNames.Length || string.IsNullOrEmpty(prefabNames[prefabIdx])) return;
 
         // 이미 생성된 오브젝트가 있으면 스킵
         if (networkObjs.ContainsKey(imageName)) return;
@@ -75,37 +78,27 @@ public class ARMultiTrackedImageController : MonoBehaviourPunCallbacks
     {
         Debug.Log($"[ARController] 네트워크 오브젝트 생성: {prefabNames[prefabIdx]}");
 
-        // 네트워크 좌표로 변환 (앵커 기준 상대 좌표)
-        Vector3 spawnPos = Vector3.zero;  // 앵커 기준 원점
+        // 마커 위치에 생성
+        Vector3 spawnPos = markerTransform.position;
+        Quaternion spawnRot = markerTransform.rotation;
 
         GameObject spawnedObj = PhotonNetwork.Instantiate(
             prefabNames[prefabIdx],
             spawnPos,
-            Quaternion.identity
+            spawnRot
         );
 
-        // RPC로 모든 클라이언트에 이미지 이름 전달
-        PhotonView pv = spawnedObj.GetComponent<PhotonView>();
-        if (pv != null)
+        // 직접 등록
+        if (spawnedObj != null)
         {
-            photonView.RPC("RegisterNetworkObject", RpcTarget.AllBuffered, imageName, pv.ViewID);
-        }
-    }
-
-    [PunRPC]
-    private void RegisterNetworkObject(string imageName, int viewID)
-    {
-        PhotonView pv = PhotonView.Find(viewID);
-        if (pv != null)
-        {
-            networkObjs[imageName] = pv.gameObject;
-            Debug.Log($"[ARController] 네트워크 오브젝트 등록: {imageName}");
+            networkObjs[imageName] = spawnedObj;
+            Debug.Log($"[ARController] 네트워크 오브젝트 등록 완료: {imageName}");
         }
     }
 
     private void HandleUpdatedImage(ARTrackedImage trackedImage)
     {
-        string imageName = trackedImage.referenceImage.name;
+        string imageName = trackedImage.trackableId.ToString();
         trackedImages[imageName] = trackedImage;
 
         // XRPlatformManager에 앵커 업데이트
@@ -138,7 +131,7 @@ public class ARMultiTrackedImageController : MonoBehaviourPunCallbacks
 
     private void HandleRemovedImage(ARTrackedImage trackedImage)
     {
-        string imageName = trackedImage.referenceImage.name;
+        string imageName = trackedImage.trackableId.ToString();
         trackedImages.Remove(imageName);
 
         // 네트워크 오브젝트는 삭제하지 않음 (다른 클라이언트도 보고 있을 수 있음)
@@ -151,7 +144,10 @@ public class ARMultiTrackedImageController : MonoBehaviourPunCallbacks
         {
             for (int i = 0; i < arTrackedImageManager.referenceLibrary.count; ++i)
             {
-                if (arTrackedImageManager.referenceLibrary[i].name == imageName) return i;
+                var refImage = arTrackedImageManager.referenceLibrary[i];
+                // name 또는 GUID로 비교
+                if (refImage.name == imageName || refImage.guid.ToString() == imageName)
+                    return i;
             }
         }
         return -1;
